@@ -14,7 +14,7 @@ func startWebServer(port string) {
 	r := NewRouter()
 	//处理静态文件
 	assets := http.FileServer(http.Dir("public"))
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static", assets))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", assets))
 	http.Handle("/", r)
 
 	log.Println("satrt hhtp service at port:", port)
