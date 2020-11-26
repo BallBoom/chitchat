@@ -16,7 +16,7 @@ type User struct {
 
 // 将生成的用户生成一条session
 func (user User) CreateSession() (session Session, err error) {
-	statment := "insert into session (uuid, email, user_id,created_at) values(?,?,?,?)"
+	statment := "insert into sessions (uuid, email, user_id,created_at) values(?,?,?,?)"
 	stin, err := Db.Prepare(statment)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -30,7 +30,7 @@ func (user User) CreateSession() (session Session, err error) {
 	stin.Exec(uuid, user.Email, user.ID, time.Now())
 
 	// 将插入的session查询出来
-	stout, err := Db.Prepare("select id, uuid, email, user_id, created_at from session where uuid=?")
+	stout, err := Db.Prepare("select id, uuid, email, user_id, created_at from sessions where uuid=?")
 	if err != nil {
 		log.Fatal(err.Error())
 		return
@@ -43,7 +43,7 @@ func (user User) CreateSession() (session Session, err error) {
 
 // Get the session for an existing user 检查某个用户是否存在session
 func (user User) Session() (s Session, err error) {
-	statment := "select uuid, user_id, email, created_at from session where user_id=?"
+	statment := "select uuid, user_id, email, created_at from sessions where user_id=?"
 	stout, err := Db.Prepare(statment)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -68,7 +68,7 @@ func (u *User) Create() (user User, err error) {
 	uuid := createUUID()
 	stin.Exec(uuid, u.Name, u.Email, Encrypt(u.Password), time.Now())
 
-	stout, err := Db.Prepare("select id, uuid, email, name, password, create_at from users where uuid=?")
+	stout, err := Db.Prepare("select id, uuid, email, name, password, created_at from users where uuid=?")
 	if err != nil {
 		log.Fatal(err.Error())
 		return

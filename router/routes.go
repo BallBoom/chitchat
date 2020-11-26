@@ -25,9 +25,33 @@ var webRoutes = WebRoutes{
 		handlers.Index,
 	},
 	{
-		"hello",
+		"login",
 		"GET",
-		"/index",
-		handlers.Hello,
+		"/login",
+		handlers.Login,
+	},
+	{
+		"logout",
+		"GET",
+		"/logout",
+		handlers.Logout,
+	},
+	{
+		"auth",
+		"POST",
+		"/authenticate",
+		handlers.Authenticate,
+	},
+	{
+		"singup",
+		"GET",
+		"/signup",
+		handlers.Signup,
+	},
+	{
+		"signup_account",
+		"POST",
+		"/signup_account",
+		handlers.SingupAccount,
 	},
 }

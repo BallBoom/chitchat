@@ -1,7 +1,7 @@
 package moudels
 
 import (
-	"log"
+	"fmt"
 	"time"
 )
 
@@ -15,11 +15,12 @@ type Session struct {
 
 // 检查session是否存在
 func (s *Session) Check() (valid bool, err error) {
-	err = Db.QueryRow("select id, uuid, email, created_at from session where uuid=?", s.UUID).
+	err = Db.QueryRow("select id, uuid, email, created_at from sessions where uuid=?", s.UUID).
 		Scan(&s.ID, &s.UUID, &s.Email, &s.CreatedAt)
 	if err != nil {
 		valid = false
-		log.Fatal(err.Error())
+		// log.Fatal(err.Error())
+		fmt.Println(err.Error())
 		return
 	}
 	if s.ID != 0 {
@@ -30,10 +31,11 @@ func (s *Session) Check() (valid bool, err error) {
 
 // UUID删除session
 func (s *Session) DeleteByUUID() (err error) {
-	stment := "delete from session where uuid=?"
+	stment := "delete from sessions where uuid=?"
 	st, err := Db.Prepare(stment)
 	if err != nil {
-		log.Fatal(err.Error())
+		// log.Fatal(err.Error())
+		fmt.Println(err.Error())
 		return
 	}
 	defer st.Close()
@@ -48,19 +50,16 @@ func (s *Session) User() (user User, err error) {
 	err = Db.QueryRow("select id,uuid, email, created_at from user where id =?", s.UserID).
 		Scan(&user.ID, &user.UUID, &user.Email, &user.CreatedAt)
 	if err != nil {
-		log.Fatal(err.Error())
+		// log.Fatal(err.Error())
+		fmt.Println(err.Error())
 	}
 	return
 }
 
 // 删除所有session
 func DeleteAllSession() (err error) {
-	stmt := "delete from session"
+	stmt := "delete from sessions"
 	_, err = Db.Prepare(stmt)
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// 	return
-	// }
-	// defer st.Close()
+
 	return
 }
